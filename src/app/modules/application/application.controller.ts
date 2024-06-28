@@ -68,7 +68,8 @@ const getAllApplication = async (req: Request, res: Response) => {
       message: 'Applications data retrieved successfully!',
       data: result,
     });
-  } catch (err: unknown) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
     console.log(err?.message);
   }
 };
