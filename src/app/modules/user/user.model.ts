@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 import { TUser, UserAnoModel } from './user.interface';
+import config from '../../config';
 
 const userSchema = new Schema<TUser>({
   name: {
@@ -20,6 +21,18 @@ const userSchema = new Schema<TUser>({
     enum: ['admin', 'user'],
     required: true,
   },
+});
+
+userSchema.pre('save', async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this;
+
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds),
+  );
+
+  next();
 });
 
 userSchema.statics.isUserExistsByEmail = async function (email: string) {

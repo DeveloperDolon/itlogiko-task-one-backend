@@ -14,11 +14,6 @@ const loginUser = async (payload: TLoginUser) => {
     email: payload?.email,
   });
 
-  const isPasswordMatched = await UserModel.isPasswordMatched(
-    payload?.password,
-    user?.password as string,
-  );
-
   if (!user) {
     return {
       status: 404,
@@ -26,6 +21,13 @@ const loginUser = async (payload: TLoginUser) => {
       message: 'Unknown user!',
     };
   }
+
+  const isPasswordMatched = await UserModel.isPasswordMatched(
+    payload?.password,
+    user?.password as string,
+  );
+
+  user.password = '';
 
   if (!isPasswordMatched) {
     return {
