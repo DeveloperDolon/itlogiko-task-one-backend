@@ -13,6 +13,7 @@ export interface TLoginUser {
 }
 
 export interface UserAnoModel extends Model<TUser> {
+  isUserExistsByEmail(id: string): Promise<TUser>;
   isPasswordMatched(
     plainTextPassword: string,
     hashedPassword: string,

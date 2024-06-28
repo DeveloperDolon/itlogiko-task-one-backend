@@ -22,6 +22,10 @@ const userSchema = new Schema<TUser>({
   },
 });
 
+userSchema.statics.isUserExistsByEmail = async function (email: string) {
+  return await UserModel.findOne({ email }).select('+password');
+};
+
 userSchema.statics.isPasswordMatched = async function (
   plainTextPassword,
   hashedPassword,
