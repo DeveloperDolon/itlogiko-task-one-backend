@@ -4,21 +4,34 @@ import { ApplicationModel } from './application.model';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../../config';
 import { UserModel } from '../user/user.model';
+import cloudinary from '../../utils/cloudinary';
 
 const createApplicationController = async (req: Request, res: Response) => {
   try {
-    const payload = req.body;
-    const serverUrl = `${req.protocol}://${req.get('host')}`;
+    cloudinary.uploader.upload(
+      req?.file?.path,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      async function (err: unknown, result2: any) {
+        if (err) {
+          return res.status(500).json({
+            success: false,
+            message: 'Error',
+          });
+        }
 
-    payload.cv = `${serverUrl}/uploads/${req?.file?.filename}`;
+        const payload = req.body;
+        payload.cv = result2?.secure_url;
 
-    const result = await ApplicationServices.createApplicationIntoDB(payload);
+        const result =
+          await ApplicationServices.createApplicationIntoDB(payload);
 
-    res.status(200).json({
-      success: true,
-      message: 'Application submitted successfully!',
-      data: result,
-    });
+        res.status(200).json({
+          success: true,
+          message: 'Application submitted successfully!',
+          data: result,
+        });
+      },
+    );
   } catch (err: unknown) {
     console.log(err);
   }
