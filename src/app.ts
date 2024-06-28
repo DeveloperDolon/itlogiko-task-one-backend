@@ -1,10 +1,15 @@
-import { Application, NextFunction, Request, Response } from 'express';
+import { Application, Request, Response } from 'express';
 import express from 'express';
 import cors from 'cors';
+import { ApplicationRouter } from './app/modules/application/application.router';
 
 const app: Application = express();
 app.use(express.json());
 app.use(cors());
+
+app.use('/uploads', express.static('uploads'));
+
+app.use('/api', ApplicationRouter);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Welcome to IT LOGIKO Server...!');

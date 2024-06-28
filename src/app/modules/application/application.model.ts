@@ -20,12 +20,8 @@ const applicationSchema = new Schema<TApplication>(
       required: true,
     },
     cv: {
-      type: {
-        filename: String,
-        path: String,
-        mimeType: String,
-        size: Number,
-      },
+      type: String,
+      required: true,
     },
   },
   {

@@ -3,5 +3,5 @@ export interface TApplication {
   email: string;
   phoneNumber: string;
   address: string;
-  cv: File;
+  cv: string;
 }
